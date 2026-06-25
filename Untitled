@@ -1,0 +1,31 @@
+# Virtual Environment
+.venv/
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Environment Variables
+.env
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# IDE Settings
+.vscode/
+
+# Model Files
+models/*.pkl
+models/*.joblib
+models/*.keras
+models/*.h5
+
+# Predictions
+data/predictions/
+
+# Logs
+*.log
