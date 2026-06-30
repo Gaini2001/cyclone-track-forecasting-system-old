@@ -10,13 +10,15 @@ Project: End-to-End Tropical Cyclone Track Forecasting System
 from pathlib import Path
 import logging
 import pandas as pd
+from src.utils.config import RAW_DATA_PATH
+from src.utils.config import REQUIRED_COLUMNS
 
 # --------------------------------------------------
 # Projects Paths
 # --------------------------------------------------
 
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
-DATA_PATH = PROJECT_ROOT / "data" / "raw" / "ibtracs.csv"
+# PROJECT_ROOT = Path(__file__).resolve().parents[2]
+# DATA_PATH = PROJECT_ROOT / "data" / "raw" / "ibtracs.csv"
 
 # --------------------------------------------------
 # Configure Logging
@@ -34,22 +36,7 @@ logger = logging.getLogger(__name__)
 # Required Columns
 # --------------------------------------------------
 
-REQUIRED_COLUMNS = [
-    "SID",
-    "SEASON",
-    "BASIN",
-    "SUBBASIN",
-    "ISO_TIME",
-    "LAT",
-    "LON",
-    "WMO_WIND",
-    "WMO_PRES",
-    "STORM_SPEED",
-    "STORM_DIR",
-    "NATURE",
-    "DIST2LAND",
-    "TRACK_TYPE"
-]
+
 
 
 # --------------------------------------------------
@@ -151,7 +138,7 @@ def main():
 
     # dataset_path = "data/raw/ibtracs.csv"
 
-    df = load_dataset(DATA_PATH)
+    df = load_dataset(RAW_DATA_PATH)
 
     validate_columns(df)
 

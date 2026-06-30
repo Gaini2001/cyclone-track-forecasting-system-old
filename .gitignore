@@ -29,3 +29,14 @@ data/predictions/
 
 # Logs
 *.log
+
+*.pyc
+*.pyo
+
+artifacts/
+
+data/raw/
+data/interim/
+data/processed/
+
+*.csv
