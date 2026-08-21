@@ -1,0 +1,14 @@
+removed_group,n_features,error_km,delta_km
+velocity,51,130.87,14.54
+intensity,52,128.86,12.53
+rolling,52,117.2,0.86
+motion,49,116.81,0.47
+acceleration,53,116.7,0.36
+turning,53,116.59,0.25
+position,54,116.5,0.16
+context,50,116.42,0.09
+lag_position,50,116.38,0.05
+temporal,52,116.38,0.04
+(none),56,116.33,0.0
+lag_intensity,50,116.29,-0.04
+cyclic,50,116.2,-0.13

@@ -1,0 +1,211 @@
+{
+  "random_forest": {
+    "6": {
+      "model": "random_forest",
+      "horizon": 6,
+      "target_mode": "displacement",
+      "split_fingerprint": "8e580539",
+      "params": {
+        "n_estimators": 500,
+        "max_depth": 18,
+        "min_samples_split": 2,
+        "min_samples_leaf": 1,
+        "max_features": 1.0
+      },
+      "best_val_error_km": 12.89,
+      "n_trials": 100,
+      "study_name": "random_forest_6h_displacement_8e580539",
+      "tuned_at": "2026-08-21T16:59:01",
+      "duration_seconds": 337.3
+    },
+    "12": {
+      "model": "random_forest",
+      "horizon": 12,
+      "target_mode": "displacement",
+      "split_fingerprint": "8e580539",
+      "params": {
+        "n_estimators": 450,
+        "max_depth": 22,
+        "min_samples_split": 3,
+        "min_samples_leaf": 3,
+        "max_features": 1.0
+      },
+      "best_val_error_km": 39.85,
+      "n_trials": 100,
+      "study_name": "random_forest_12h_displacement_8e580539",
+      "tuned_at": "2026-08-21T17:15:09",
+      "duration_seconds": 371.4
+    },
+    "24": {
+      "model": "random_forest",
+      "horizon": 24,
+      "target_mode": "displacement",
+      "split_fingerprint": "8e580539",
+      "params": {
+        "n_estimators": 500,
+        "max_depth": 27,
+        "min_samples_split": 6,
+        "min_samples_leaf": 2,
+        "max_features": 0.5
+      },
+      "best_val_error_km": 112.09,
+      "n_trials": 100,
+      "study_name": "random_forest_24h_displacement_8e580539",
+      "tuned_at": "2026-08-21T17:26:05",
+      "duration_seconds": 331.8
+    },
+    "48": {
+      "model": "random_forest",
+      "horizon": 48,
+      "target_mode": "displacement",
+      "split_fingerprint": "8e580539",
+      "params": {
+        "n_estimators": 100,
+        "max_depth": 21,
+        "min_samples_split": 4,
+        "min_samples_leaf": 8,
+        "max_features": 0.5
+      },
+      "best_val_error_km": 302.32,
+      "n_trials": 100,
+      "study_name": "random_forest_48h_displacement_8e580539",
+      "tuned_at": "2026-08-21T17:37:17",
+      "duration_seconds": 120.9
+    },
+    "72": {
+      "model": "random_forest",
+      "horizon": 72,
+      "target_mode": "displacement",
+      "split_fingerprint": "8e580539",
+      "params": {
+        "n_estimators": 500,
+        "max_depth": 17,
+        "min_samples_split": 2,
+        "min_samples_leaf": 11,
+        "max_features": 0.5
+      },
+      "best_val_error_km": 521.38,
+      "n_trials": 100,
+      "study_name": "random_forest_72h_displacement_8e580539",
+      "tuned_at": "2026-08-21T17:41:28",
+      "duration_seconds": 88.3
+    }
+  },
+  "xgboost": {
+    "6": {
+      "model": "xgboost",
+      "horizon": 6,
+      "target_mode": "displacement",
+      "split_fingerprint": "8e580539",
+      "params": {
+        "max_depth": 7,
+        "learning_rate": 0.01805264774098241,
+        "subsample": 0.8437068740016499,
+        "colsample_bytree": 0.987912685565511,
+        "min_child_weight": 5,
+        "gamma": 0.0025190903197610235,
+        "reg_alpha": 0.006970074210645167,
+        "reg_lambda": 0.8024330241795217,
+        "n_estimators": 2000
+      },
+      "best_val_error_km": 10.75,
+      "n_trials": 100,
+      "study_name": "xgboost_6h_displacement_8e580539",
+      "tuned_at": "2026-08-21T17:08:57",
+      "duration_seconds": 596.4,
+      "best_iteration": 1999
+    },
+    "12": {
+      "model": "xgboost",
+      "horizon": 12,
+      "target_mode": "displacement",
+      "split_fingerprint": "8e580539",
+      "params": {
+        "max_depth": 8,
+        "learning_rate": 0.012612174826768824,
+        "subsample": 0.5308931381395747,
+        "colsample_bytree": 0.9375920655475071,
+        "min_child_weight": 8,
+        "gamma": 0.00027593083814661415,
+        "reg_alpha": 0.0004643423601607896,
+        "reg_lambda": 1.0402417298947297,
+        "n_estimators": 1372
+      },
+      "best_val_error_km": 36.95,
+      "n_trials": 100,
+      "study_name": "xgboost_12h_displacement_8e580539",
+      "tuned_at": "2026-08-21T17:20:33",
+      "duration_seconds": 323.6,
+      "best_iteration": 1371
+    },
+    "24": {
+      "model": "xgboost",
+      "horizon": 24,
+      "target_mode": "displacement",
+      "split_fingerprint": "8e580539",
+      "params": {
+        "max_depth": 9,
+        "learning_rate": 0.010131791211258819,
+        "subsample": 0.5124451753838173,
+        "colsample_bytree": 0.9612855098890511,
+        "min_child_weight": 1,
+        "gamma": 0.0007816367135975127,
+        "reg_alpha": 0.00010409101237169945,
+        "reg_lambda": 4.703712095289708,
+        "n_estimators": 990
+      },
+      "best_val_error_km": 107.84,
+      "n_trials": 100,
+      "study_name": "xgboost_24h_displacement_8e580539",
+      "tuned_at": "2026-08-21T17:35:16",
+      "duration_seconds": 550.5,
+      "best_iteration": 989
+    },
+    "48": {
+      "model": "xgboost",
+      "horizon": 48,
+      "target_mode": "displacement",
+      "split_fingerprint": "8e580539",
+      "params": {
+        "max_depth": 9,
+        "learning_rate": 0.012237296872063302,
+        "subsample": 0.5144298756340707,
+        "colsample_bytree": 0.9982623319192657,
+        "min_child_weight": 11,
+        "gamma": 0.007150586303038101,
+        "reg_alpha": 0.005042610841670417,
+        "reg_lambda": 6.963987287380693,
+        "n_estimators": 379
+      },
+      "best_val_error_km": 294.54,
+      "n_trials": 100,
+      "study_name": "xgboost_48h_displacement_8e580539",
+      "tuned_at": "2026-08-21T17:40:00",
+      "duration_seconds": 162.0,
+      "best_iteration": 378
+    },
+    "72": {
+      "model": "xgboost",
+      "horizon": 72,
+      "target_mode": "displacement",
+      "split_fingerprint": "8e580539",
+      "params": {
+        "max_depth": 8,
+        "learning_rate": 0.020655701446294732,
+        "subsample": 0.6612442301915039,
+        "colsample_bytree": 0.9035824458559292,
+        "min_child_weight": 3,
+        "gamma": 0.4875581379005714,
+        "reg_alpha": 9.910749953469832,
+        "reg_lambda": 6.110612343775024,
+        "n_estimators": 168
+      },
+      "best_val_error_km": 502.68,
+      "n_trials": 100,
+      "study_name": "xgboost_72h_displacement_8e580539",
+      "tuned_at": "2026-08-21T17:43:11",
+      "duration_seconds": 102.2,
+      "best_iteration": 167
+    }
+  }
+}

@@ -1,0 +1,88 @@
+# =========================================================
+# Cyclone Track Forecast API — deployment image
+#
+# Differences from the development Dockerfile:
+#
+#   * Models are COPIED IN, not mounted. A managed container service has no
+#     host filesystem to mount from, so an image that expects a volume starts
+#     up and reports "degraded" forever.
+#   * XGBoost only. The Random Forest artifacts total 551 MB against XGBoost's
+#     17.6 MB, and XGBoost matches or beats it at every horizon (the 72h
+#     difference is inside the confidence interval). A 30x smaller image is
+#     worth more than a 2.4 km difference nobody can measure.
+#   * No Streamlit. The dashboard is a separate deployment that calls this API
+#     over HTTP; bundling both would put two processes in one container and
+#     load every model twice.
+#   * PORT is read from the environment. Cloud Run, Azure Container Apps and
+#     App Runner all inject it, and a hardcoded port fails health checks on
+#     all three.
+#
+# Build:
+#   docker build -f Dockerfile.deploy -t cyclone-api .
+#   docker run -p 8000:8000 cyclone-api
+# =========================================================
+
+FROM python:3.11-slim AS builder
+
+WORKDIR /build
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# Serving needs a fraction of the training stack. Installing only what the API
+# imports keeps the image around 400 MB instead of 1.2 GB -- optuna,
+# matplotlib and their transitive dependencies are all build-time only.
+COPY requirements-api.txt .
+
+RUN pip install --no-cache-dir --prefix=/install -r requirements-api.txt
+
+
+# =========================================================
+
+FROM python:3.11-slim
+
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONPATH=/app \
+    PORT=8000
+
+WORKDIR /app
+
+COPY --from=builder /install /usr/local
+
+# Application code. src/ is needed in full: app/feature_builder.py calls the
+# real feature engineering functions, which is what guarantees the serving
+# features match the training features exactly.
+COPY src/ src/
+COPY app/ app/
+
+# Only the horizons being served. Edit the glob to change what the API offers;
+# available_models() scans this directory, so /health reports whatever is here
+# and /predict returns 503 for anything else.
+COPY models/xgboost_6h_displacement.pkl   models/
+COPY models/xgboost_6h_displacement.json  models/
+COPY models/xgboost_12h_displacement.pkl  models/
+COPY models/xgboost_12h_displacement.json models/
+COPY models/xgboost_24h_displacement.pkl  models/
+COPY models/xgboost_24h_displacement.json models/
+
+# Measured track error, read by the API so /predict can report it honestly
+# rather than returning a hardcoded constant.
+COPY reports/evaluation_results.json reports/
+
+RUN useradd --create-home --uid 1000 cyclone \
+    && chown -R cyclone:cyclone /app
+USER cyclone
+
+EXPOSE 8000
+
+# urllib rather than curl: python:slim ships no curl, and a healthcheck that
+# can never pass makes a container permanently unhealthy.
+HEALTHCHECK --interval=30s --timeout=10s --start-period=25s --retries=3 \
+    CMD python -c "import os,urllib.request,sys; \
+    sys.exit(0 if urllib.request.urlopen(f\"http://localhost:{os.environ.get('PORT','8000')}/health\", timeout=5).status == 200 else 1)"
+
+# Shell form so $PORT expands. Managed services inject it and expect the
+# container to listen there.
+CMD exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000} --workers 1

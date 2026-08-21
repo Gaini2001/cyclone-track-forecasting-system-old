@@ -1,0 +1,36 @@
+# Serving dependencies only.
+#
+# The full requirements.txt installs optuna, matplotlib, scikit-learn and the
+# test tooling -- none of which the API imports. Traced from app.main, the
+# only third-party packages reachable at import time are fastapi, pydantic,
+# numpy, pandas and joblib, plus xgboost for unpickling the estimators.
+#
+# Two deliberate substitutions:
+#
+#   xgboost-cpu   The standard xgboost wheel bundles CUDA libraries -- around
+#                 250 MB of GPU support for a container that will only ever
+#                 run on CPU. xgboost-cpu is the same module name and
+#                 unpickles the same artifacts.
+#
+#   no pyarrow    Parquet is only read by the training pipeline. The serving
+#                 path builds its DataFrame from the request body, so pyarrow
+#                 is ~120 MB that is never imported.
+
+numpy>=1.24,<3.0
+pandas>=2.0,<3.0
+
+# Same module name as `xgboost`; unpickles models saved by the full package.
+# Pinned to match the major version models/*.pkl were actually trained under
+# (recorded in each model's .json sidecar) -- xgboost's own loader warns that
+# unpickling across a major version is not guaranteed to reproduce predictions,
+# and in practice it doesn't: a 2.x container serving a 3.x-trained model
+# measurably shifted the forecast. If your platform has no xgboost-cpu wheel,
+# swap to `xgboost>=3.0,<4.0` -- the image grows by roughly 250 MB but is
+# otherwise identical.
+xgboost-cpu>=3.0,<4.0
+
+joblib>=1.3            # unpickles the saved estimators
+
+fastapi>=0.115
+uvicorn[standard]>=0.34
+pydantic>=2.0

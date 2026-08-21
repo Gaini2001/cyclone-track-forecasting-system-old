@@ -9,7 +9,7 @@ missing meteorological variables before model training.
 
 import pandas as pd
 
-from src.utils.config import CLEAN_DATA_PATH
+from src.utils.config import CLEAN_DATA_PATH, CSV_NA_VALUES
 
 
 def main():
@@ -18,7 +18,9 @@ def main():
     print("IBTrACS Missing Data Analysis")
     print("=" * 70)
 
-    df = pd.read_csv(CLEAN_DATA_PATH)
+    df = pd.read_csv(
+        CLEAN_DATA_PATH, keep_default_na=False, na_values=CSV_NA_VALUES
+    )
 
     print(f"\nDataset Shape : {df.shape}")
 

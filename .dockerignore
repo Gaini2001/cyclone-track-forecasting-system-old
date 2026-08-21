@@ -1,11 +1,22 @@
-.venv
-__pycache__
-.ipynb_checkpoints
+# Keep the build context small. Without this, `docker build` uploads the entire
+# data directory — several gigabytes of IBTrACS CSV and Parquet — before the
+# first instruction runs.
+data/
 
-data/raw
-notebooks
+# models/ is NOT excluded: Dockerfile.deploy copies the XGBoost artifacts in.
+# Excluding it here would produce an image that starts up and reports
+# "degraded" with no obvious cause.
 
-.git
-.gitignore
-
+reports/figures/
+reports/logs/
+.git/
+.venv/
+.venv_*/
+__pycache__/
+**/__pycache__/
 *.pyc
+.pytest_cache/
+tests/
+notebooks/
+*.md
+!README.md

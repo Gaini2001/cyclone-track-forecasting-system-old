@@ -1,0 +1,57 @@
+# Cyclone Track Forecasting — local stack.
+#
+# `version:` is omitted: it has been obsolete since Compose v2 and now emits a
+# warning on every invocation.
+#
+# Models are mounted rather than baked into the image. They are hundreds of
+# megabytes, they change independently of the code, and rebuilding the image
+# every time one is retrained is the wrong trade. Train them first:
+#
+#     python -m src.s5_training.train_model --model all --horizon all
+#
+# With no models present the API answers /health with "degraded" and /predict
+# with 503, which is the intended behaviour rather than a crash.
+
+services:
+
+  api:
+    build: .
+    container_name: cyclone-api
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./models:/app/models:ro
+      - ./reports:/app/reports:ro
+    environment:
+      - CYCLONE_LOG_LEVEL=INFO
+      # Restrict this to the dashboard origin for anything beyond local use.
+      - CORS_ORIGINS=*
+    healthcheck:
+      test: [ "CMD", "python", "-c", "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://localhost:8000/health', timeout=5).status == 200 else 1)" ]
+      interval: 30s
+      timeout: 10s
+      start_period: 20s
+      retries: 3
+    restart: unless-stopped
+
+  dashboard:
+    build: .
+    container_name: cyclone-dashboard
+    command: >
+      streamlit run app/app.py --server.port 8501 --server.address 0.0.0.0 --server.headless true
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./models:/app/models:ro
+      - ./reports:/app/reports:ro
+    environment:
+      - API_URL=http://api:8000
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped
+
+# app/app.py is a thin HTTP client: it calls the api service over API_URL
+# (requests.post(f"{API_URL}/predict", ...)) rather than loading models itself,
+# so the dashboard container stays lightweight and the two services can scale
+# or redeploy independently.
